@@ -6,3 +6,6 @@ qvalidation.egg-info/
 qvalidation/__pycache__
 .vscode/
 Pipenv.lock
+.pytest_cache
+qservice.egg-info/
+qservice/exemplo.py
