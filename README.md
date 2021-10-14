@@ -116,14 +116,14 @@ from database import db
 
 service = create_service(db=db)
 
-@service()
+@service(global_varname='g')
 def accept_only_number_two(ctx, number):
     if number != 2:
         ctx.add_error('number', 'This number is not two', True)
 
     ctx.add_message('This number is two')
 
-    ctx.db.query("select 2")
+    ctx.g.db.query("select 2")
 
     return number
 
