@@ -105,6 +105,46 @@ if __name__ == '__main__':
 
 ```
 
+## With create_service
+
+Add some dependencies
+
+```python
+
+from qservice import create_service
+from database import db
+
+service = create_service(db=db)
+
+@service()
+def accept_only_number_two(ctx, number):
+    if number != 2:
+        ctx.add_error('number', 'This number is not two', True)
+
+    ctx.add_message('This number is two')
+
+    ctx.db.query("select 2")
+
+    return number
+
+# Using service
+
+result = accept_only_number_two(2)
+result.ok       # True
+result.value    # 2
+result.errors   # []
+result.messages # ['This number is two']
+result.json()   # return a json
+resturn.dict()  # return a dict
+
+
+result = accept_only_number_two(1)
+result.ok       # False
+result.value    # None
+result.errors   # ['This number is not two']
+result.messages # []
+```
+
 # Runing Tests
 
 In root folder

@@ -1,5 +1,5 @@
-help:
-	# options: clean, build, check, upload_test, upload_prod
+test:
+	pytest
 
 clean:
 	rm -rf build/ dist/

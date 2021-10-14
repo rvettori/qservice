@@ -3,9 +3,15 @@ from functools import wraps
 import inspect
 import json
 
+__dependencies = {}
+
+def create_service(**deps):
+    global __dependencies
+    __dependencies = deps
+    return service
 
 
-def service(raise_exceptions=True, context_varname='fn', steps_varname='steps', previous_step_varname='previous_step'):
+def service(raise_exceptions=True, context_varname='ctx', steps_varname='steps', previous_step_varname='previous_step', global_varname='g'):
     def wrapper(func):
         @wraps(func)
         def wrapper(**kwargs):
@@ -114,8 +120,10 @@ def service(raise_exceptions=True, context_varname='fn', steps_varname='steps', 
 
             context = Context()
             Result = namedtuple("Result", "ok name value errors messages json dict")
+            GlobalVar = namedtuple("GlobalVar", __dependencies.keys())
 
             try:
+                setattr(context, global_varname, GlobalVar(**__dependencies))
                 kwargs[context_varname] = context
                 context.name = func.__name__
                 context.value = func(**context._get_declared_args(func, kwargs))
@@ -133,3 +141,4 @@ def service(raise_exceptions=True, context_varname='fn', steps_varname='steps', 
 
         return wrapper
     return wrapper
+

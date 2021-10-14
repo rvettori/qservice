@@ -21,7 +21,7 @@ def test_default_return():
 def test_messages():
     """Should return messages in returned object"""
 
-    @service()
+    @service(context_varname="fn")
     def myservice(fn):
         fn.add_message('the field message')
         return 'ok'
@@ -34,7 +34,7 @@ def test_messages():
 def test_errors():
     """Should return messages in returned object"""
 
-    @service()
+    @service(context_varname="fn")
     def myservice(fn):
         fn.add_error('field','the field error')
         return 'ok'
@@ -45,7 +45,7 @@ def test_errors():
     assert myservice().errors['field'] == 'the field error'
 
 
-    @service()
+    @service(context_varname="fn")
     def myservice2(fn):
         fn.add_error('field','the field error')
         fn.add_error('field2','the field2 error')
@@ -58,7 +58,7 @@ def test_errors():
     assert myservice2().errors['field'] == 'the field error'
 
 
-    @service()
+    @service(context_varname="fn")
     def myservice3(fn):
         fn.add_error('field','the field error', True)
         fn.add_error('field2','the field2 error', True)
@@ -173,13 +173,13 @@ def test_step_errors_and_messages():
     Service `step3` should not be executed
     """
 
-    @service()
+    @service(context_varname="fn")
     def step1(fn, number, **kwargs):
         fn.add_message("number is {}".format(number))
 
         return 1 + number
 
-    @service()
+    @service(context_varname="fn")
     def step2(fn, number, steps, previous_step, **kwargs):
         fn.add_message("step 2")
         fn.add_error('number', 'Number shoud be {}', True)
@@ -216,11 +216,11 @@ def test_step_when():
     """steps: should be executed with conditional roles.
     """
 
-    @service()
+    @service(context_varname="fn")
     def step1(fn, number, **kwargs):
         return number
 
-    @service()
+    @service(context_varname="fn")
     def step2(fn, number, steps, previous_step, **kwargs):
         return 2 * previous_step.value
 
