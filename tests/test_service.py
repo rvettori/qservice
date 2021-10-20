@@ -34,7 +34,7 @@ def test_messages():
 def test_errors():
     """Should return messages in returned object"""
 
-    @service(context_varname="fn")
+    @service(context_varname="fn", stop_on_error=False)
     def myservice(fn):
         fn.add_error('field','the field error')
         return 'ok'
@@ -45,7 +45,7 @@ def test_errors():
     assert myservice().errors['field'] == 'the field error'
 
 
-    @service(context_varname="fn")
+    @service(context_varname="fn", stop_on_error=False)
     def myservice2(fn):
         fn.add_error('field','the field error')
         fn.add_error('field2','the field2 error')
@@ -262,3 +262,10 @@ def test_step_when():
     result = myflow(number=3)
     assert result.ok == True
     assert result.value == 17
+
+
+
+# TODO:
+# stop_on_error=True -> Sai na primeira ocorrência de erro.
+# steps_varname="steps" -> OrderedDict com nome do metodo e resultado de cada etapa na ordem de ocorrencia
+# add_error -> stop_execution -> stop_on_error
